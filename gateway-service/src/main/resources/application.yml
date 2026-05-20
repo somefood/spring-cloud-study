@@ -8,6 +8,10 @@ spring:
 
   cloud:
     gateway:
+      # 모든 라우트에 기본으로 적용될 필터
+      default-filters:
+        # 커스텀 필터 이름은 'Filter' 접미사를 제외하고 카멜케이스로 작성
+        - AuthenticationFilter
       # 3. 라우팅 규칙 정의 (routes는 List 형태)
       routes:
         # --- 회원 서비스 라우트 ---
@@ -41,3 +45,6 @@ spring:
           uri: http://localhost:8083 # (아직 존재하지 않는 서비스)
           predicates:
             - Path=/api/v1/orders/**
+
+jwt:
+  secret: 'a_very_long_and_secure_secret_key_for_ecommerce_project_that_is_at_least_256_bits_long'
