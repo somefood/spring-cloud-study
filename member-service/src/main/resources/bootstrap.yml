@@ -1,0 +1,10 @@
+  ed!# member-service/src/main/resources/bootstrap.yml
+  spring:
+    application:
+      name: member-service
+    cloud:
+      config:
+        uri: http://localhost:8888
+    # 1. 이 서비스가 실행될 기본 프로파일을 지정
+    profiles:
+      active: dev

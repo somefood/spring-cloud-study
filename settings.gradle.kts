@@ -6,3 +6,5 @@ pluginManagement {
 }
 
 rootProject.name = "spring-cloud-study"
+
+include("gateway-service", "member-service")
