@@ -30,6 +30,20 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     // (테스트 및 DB 의존성은 03.03절에서 추가)
+
+    // 1. 스프링 부트 기본 테스트 스타터 (JUnit, Mockito, MockMvc 등 포함)
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
+
+    // 2. Kotest Runner (JUnit5 위에서 동작)
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.8.1")
+    // 3. Kotest Assertions (shouldBe 등)
+    testImplementation("io.kotest:kotest-assertions-core-jvm:5.8.1")
+    // 4. Spring과 Kotest를 연동하기 위한 라이브러리
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
+    // 5. 코틀린 네이티브 Mocking 라이브러리 (Mockito 대신 MockK 사용)
+    testImplementation("io.mockk:mockk:1.13.10")
 }
 
 kotlin {
