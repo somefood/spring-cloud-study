@@ -39,4 +39,12 @@ class JwtUtil(@Value("\${jwt.secret}") secret: String) {
     fun isTokenExpired(token: String): Boolean {
         return getAllClaims(token).expiration.before(Date())
     }
+
+    /**
+     * 토큰에서 역할(roles) 정보 추출
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun getRoles(token: String): List<String> {
+        return getAllClaims(token)["roles"] as List<String>? ?: emptyList()
+    }
 }

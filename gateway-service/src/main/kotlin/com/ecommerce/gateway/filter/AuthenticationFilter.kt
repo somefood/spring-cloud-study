@@ -1,5 +1,6 @@
 package com.ecommerce.gateway.filter
 
+import com.ecommerce.gateway.config.SecurityProperties
 import com.ecommerce.gateway.util.JwtUtil
 import io.jsonwebtoken.JwtException
 import org.springframework.cloud.gateway.filter.GatewayFilter
@@ -7,16 +8,21 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.util.AntPathMatcher
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
 @Component
 class AuthenticationFilter(
-    private val jwtUtil: JwtUtil
+    private val jwtUtil: JwtUtil,
+    private val securityProperties: SecurityProperties,
 ) : AbstractGatewayFilterFactory<AuthenticationFilter.Config>(Config::class.java) {
 
     // 설정 클래스 (현재는 사용하지 않음)
     class Config
+
+    // AntPathMatcher 인스턴스 추가
+    private val pathMatcher = AntPathMatcher()
 
     override fun apply(config: Config): GatewayFilter {
         return GatewayFilter { exchange, chain ->
@@ -41,10 +47,14 @@ class AuthenticationFilter(
 
             // 4. 토큰 유효성 검증
             try {
-                // (만료 여부 등 상세 검증은 JwtUtil 내부에 구현 가능)
                 val memberId = jwtUtil.getMemberId(token)
+                val memberRoles = jwtUtil.getRoles(token)
+                val requiredRole = getRequiredRoleForPath(request.uri.path)
 
-                // 5. 검증 성공 시, 요청에 'X-Member-Id' 헤더 추가
+                if (requiredRole != null && !memberRoles.contains(requiredRole)) {
+                    return@GatewayFilter onError(exchange, "Required role not satisfied", HttpStatus.FORBIDDEN)
+                }
+
                 val modifiedRequest = request.mutate()
                     .header("X-Member-Id", memberId.toString())
                     .build()
@@ -59,7 +69,16 @@ class AuthenticationFilter(
     private fun onError(exchange: ServerWebExchange, err: String, httpStatus: HttpStatus): Mono<Void> {
         val response = exchange.response
         response.statusCode = httpStatus
-        // (로그 남기는 로직 추가)
+        // TODO: 로그 추가
         return response.setComplete()
+    }
+
+    /**
+     * application.yml 설정을 기반으로 현재 경로에 필요한 역할을 찾아 반환
+     */
+    private fun getRequiredRoleForPath(path: String): String? {
+        return securityProperties.requiredRoles
+            .find { config -> pathMatcher.match(config.path, path) }
+            ?.role
     }
 }
