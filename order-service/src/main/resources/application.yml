@@ -1,0 +1,28 @@
+# 1. Feign에 서킷 브레이커 기능 활성화
+feign:
+  circuitbreaker:
+    enabled: true
+
+# 2. Resilience4j 서킷 브레이커 상세 설정
+resilience4j:
+  circuitbreaker:
+    # 3. 설정 그룹(instances) 정의
+    instances:
+      # 4. 'product-service'라는 이름의 서킷 브레이커 설정
+      # 이 이름은 FeignClient의 name/contextId와 일치시킬 수 있음
+      product-service:
+        # --- 서킷을 OPEN 상태로 전환할 조건 ---
+        sliding-window-type: COUNT_BASED # 1. 최근 호출 '횟수' 기반으로 실패율 계산
+        sliding-window-size: 10          # 2. 최근 10번의 호출을 샘플링
+        failure-rate-threshold: 50       # 3. 그 중 50% (5번) 이상 실패하면 서킷 OPEN
+
+        # --- OPEN 상태에서의 동작 ---
+        wait-duration-in-open-state: 5s  # 4. OPEN 상태를 5초간 유지. 이후 HALF_OPEN
+
+        # --- HALF_OPEN 상태에서의 동작 ---
+        permitted-number-of-calls-in-half-open-state: 3 # 5. 3번의 테스트 호출 허용
+
+        # ... 기록할 예외와 무시할 예외 ...
+        # (기본적으로 모든 예외를 실패로 간주. 특정 예외를 무시할 수도 있음)
+        # ignore-exceptions:
+        #  - com.ecommerce.order.client.ProductNotFoundException

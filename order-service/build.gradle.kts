@@ -36,6 +36,11 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    // 1. Spring Cloud Circuit Breaker 스타터 (Resilience4j 구현체 포함)
+    implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
+
+    // 2. Feign과의 연동을 위해 필요
+    implementation("io.github.resilience4j:resilience4j-feign")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.springframework.cloud", module = "spring-cloud-starter-config")
