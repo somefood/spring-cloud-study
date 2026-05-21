@@ -31,5 +31,7 @@ dependencies {
     // 3. (필수) Consul의 헬스 체크를 위한 Actuator 의존성 추가
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

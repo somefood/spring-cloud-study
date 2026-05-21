@@ -15,8 +15,7 @@ dependencyManagement {
 dependencies {
     // 1. Config Server 스타터
     implementation("org.springframework.cloud:spring-cloud-config-server")
-    // 2. Config Server도 Eureka에 등록하여 고가용성 확보
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
 
     // Kotlin dependencies
     implementation("org.jetbrains.kotlin:kotlin-reflect")
