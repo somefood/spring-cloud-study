@@ -25,5 +25,11 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 
+    // 2. Consul 디스커버리 클라이언트 의존성 추가
+    implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
+
+    // 3. (필수) Consul의 헬스 체크를 위한 Actuator 의존성 추가
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
