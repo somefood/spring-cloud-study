@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: member-service
+
+# 6. Actuator의 health 엔드포인트 활성화
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

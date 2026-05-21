@@ -1,10 +1,9 @@
-  ed!# member-service/src/main/resources/bootstrap.yml
-  spring:
-    application:
-      name: member-service
-    cloud:
-      config:
-        uri: http://localhost:8888
-    # 1. 이 서비스가 실행될 기본 프로파일을 지정
-    profiles:
-      active: dev
+# member-service/src/main/resources/bootstrap.yml
+spring:
+  application:
+    name: member-service # 1. Config Server에 어떤 파일을 요청할지 식별하는 ID
+  cloud:
+    config:
+      # 2. Config Server의 주소
+      uri: http://localhost:8888
+      # (만약 Config Server가 여러 대라면 fail-fast, retry 등 설정 가능)

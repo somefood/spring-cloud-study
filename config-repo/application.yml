@@ -1,9 +1,4 @@
-server:
-  port: 8888
-
 spring:
-  application:
-    name: member-service
   cloud:
     consul:
       host: localhost
@@ -15,10 +10,3 @@ spring:
         health-check-interval: 15s
         # 5. 서비스 ID를 고유하게 만들어 동일 호스트에서 여러 인스턴스 실행 가능
         instance-id: ${spring.application.name}:${random.value}
-
-# 6. Actuator의 health 엔드포인트 활성화
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info
