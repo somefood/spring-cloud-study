@@ -14,15 +14,25 @@ resilience4j:
         # --- 서킷을 OPEN 상태로 전환할 조건 ---
         sliding-window-type: COUNT_BASED # 1. 최근 호출 '횟수' 기반으로 실패율 계산
         sliding-window-size: 10          # 2. 최근 10번의 호출을 샘플링
-        failure-rate-threshold: 50       # 3. 그 중 50% (5번) 이상 실패하면 서킷 OPEN
+        failure-rate-threshold: 50       # 3. 그 중 50% (5번) 이상 실패하면 서킷을 OPEN
 
         # --- OPEN 상태에서의 동작 ---
-        wait-duration-in-open-state: 5s  # 4. OPEN 상태를 5초간 유지. 이후 HALF_OPEN
+        wait-duration-in-open-state: 5s # 4. OPEN 상태를 5초간 유지. 이후 HALF_OPEN으로 전환
 
         # --- HALF_OPEN 상태에서의 동작 ---
         permitted-number-of-calls-in-half-open-state: 3 # 5. 3번의 테스트 호출 허용
 
-        # ... 기록할 예외와 무시할 예외 ...
-        # (기본적으로 모든 예외를 실패로 간주. 특정 예외를 무시할 수도 있음)
+        # --- 기록할 예외와 무시할 예외 ---
+        # 기본적으로 모든 예외를 실패로 간주. 특정 예외를 무시할 수도 있음
         # ignore-exceptions:
-        #  - com.ecommerce.order.client.ProductNotFoundException
+        #   - com.ecommerce.order.client.ProductNotFoundException
+
+  retry:
+    instances:
+      product-service:
+        max-attempts: 3 # 1. 최대 3번 시도 (첫 시도 + 2번 재시도)
+        wait-duration: 100ms # 2. 재시도 사이 100ms 대기
+        # 3. 어떤 예외 발생 시 재시도할 것인지 지정 (예: 5xx 서버 에러)
+        retry-exceptions:
+          - feign.FeignException$ServiceUnavailable
+          - java.util.concurrent.TimeoutException
