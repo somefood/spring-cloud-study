@@ -42,6 +42,11 @@ dependencies {
     // 2. Feign과의 연동을 위해 필요
     implementation("io.github.resilience4j:resilience4j-feign")
 
+    // 1. Spring Cloud Stream 스타터
+    implementation("org.springframework.cloud:spring-cloud-stream")
+    // 2. Kafka 바인더 추가
+    implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.springframework.cloud", module = "spring-cloud-starter-config")
     }
