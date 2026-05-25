@@ -9,7 +9,7 @@ spring:
 
       # 함수와 토픽을 연결하는 바인딩 설정
       function:
-        # 1. 활성화할 함수의 Bean 이름을 정의
+        # 1. 활성화할 Consumer 함수의 Bean 이름을 정의
         definition: onOrderPaid
       bindings:
         # 2. 'onOrderPaid' 함수의 '입력(in)' 채널에 대한 설정
