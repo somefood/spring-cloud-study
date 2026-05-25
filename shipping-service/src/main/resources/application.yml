@@ -1,0 +1,21 @@
+# shipping-service/src/main/resources/application.yml
+spring:
+  cloud:
+    stream:
+      # Kafka 바인더를 위한 설정
+      kafka:
+        binder:
+          brokers: localhost:9092 # Kafka 서버 주소
+
+      # 함수와 토픽을 연결하는 바인딩 설정
+      function:
+        # 1. 활성화할 함수의 Bean 이름을 정의
+        definition: onOrderPaid
+      bindings:
+        # 2. 'onOrderPaid' 함수의 '입력(in)' 채널에 대한 설정
+        # 형식: <function-name>-<in/out>-<index>
+        onOrderPaid-in-0:
+          # 3. 이 채널이 구독할 Kafka 토픽의 이름
+          destination: ecommerce.orders.paid
+          # 4. Kafka 컨슈머 그룹 설정 (동일 그룹 내에서는 하나의 컨슈머만 메시지를 받음)
+          group: shipping-service-group
